@@ -1,0 +1,62 @@
+DROP DATABASE IF EXISTS compta;
+CREATE DATABASE compta;
+USE compta;
+
+CREATE TABLE FOURNISSEUR (
+    ID INT PRIMARY KEY,
+    NOM VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE ARTICLE (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    REF VARCHAR(10) NOT NULL,
+    DESIGNATION VARCHAR(100) NOT NULL,
+    PRIX DECIMAL(10,2) NOT NULL,
+    ID_FOU INT,
+    FOREIGN KEY (ID_FOU) REFERENCES FOURNISSEUR(ID)
+);
+
+CREATE TABLE BON (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    NUMERO VARCHAR(20) NOT NULL,
+    DATE_CMDE DATE NOT NULL,
+    DELAI INT NOT NULL,
+    ID_FOU INT,
+    FOREIGN KEY (ID_FOU) REFERENCES FOURNISSEUR(ID)
+);
+
+CREATE TABLE COMPO (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    QTE INT NOT NULL,
+    ID_ART INT,
+    ID_BON INT,
+    FOREIGN KEY (ID_ART) REFERENCES ARTICLE(ID),
+    FOREIGN KEY (ID_BON) REFERENCES BON(ID)
+);
+
+INSERT INTO FOURNISSEUR (ID, NOM) VALUES
+(1, 'Française d''Imports'),
+(2, 'FDMSA'),
+(3, 'Dubois & Fils');
+
+INSERT INTO ARTICLE (REF, DESIGNATION, PRIX, ID_FOU) VALUES
+('A01', 'Perceuse P1', 74.99, 1),
+('F01', 'Boulon laiton 4 x 40 mm (sachet de 10)', 2.25, 2),
+('F02', 'Boulon laiton 5 x 40 mm (sachet de 10)', 4.45, 2),
+('D01', 'Boulon laiton 5 x 40 mm (sachet de 10)', 4.40, 3),
+('A02', 'Meuleuse 125mm', 37.85, 1),
+('D03', 'Boulon acier zingué 4 x 40mm (sachet de 10)', 1.80, 3),
+('A03', 'Perceuse à colonne', 185.25, 1),
+('D04', 'Coffret mèches à bois', 12.25, 2),
+('F03', 'Coffret mèches plates', 6.25, 3),
+('F04', 'Fraises d''encastrement', 8.14, 2);
+
+INSERT INTO BON (NUMERO, DATE_CMDE, DELAI, ID_FOU) VALUES
+('BC001', CURDATE(), 3, 1),
+('BC002', CURDATE(), 3, 1),
+('BC003', CURDATE(), 3, 1);
+
+INSERT INTO COMPO (QTE, ID_ART, ID_BON) VALUES
+(3, 1, 1),
+(4, 5, 2),
+(1, 7, 3);
